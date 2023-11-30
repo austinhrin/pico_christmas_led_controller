@@ -1,6 +1,10 @@
 from machine import Pin, PWM
 from time import sleep
 
+# color mode options
+# alternating_green_fade will alternate between both strips fading green
+color_mode = "alternating_green_fade"
+
 # turn on the onboard led
 #led = Pin(25, Pin.OUT)
 #led.toggle()
@@ -22,21 +26,22 @@ strip2_green.freq(1000)
 
 # make it fade
 fade_sleep = 0.0001 #0.0001
-count_steps = 5
+count_steps = 1
 duty_range = 65025
 
 while True:
-    for duty in range(0, duty_range, count_steps):
-        # fade in
-        strip1_green.duty_u16(duty)
-        # fade out
-        reverse_duty = duty_range - duty
-        strip2_green.duty_u16(reverse_duty)
-        sleep(fade_sleep)
-    for duty in range(duty_range, 0, -count_steps):
-        # fade out
-        strip1_green.duty_u16(duty)
-        # fade in
-        reverse_duty = duty_range - duty
-        strip2_green.duty_u16(reverse_duty)
-        sleep(fade_sleep)
+    if color_mode == "alternating_green_fade"
+        for duty in range(0, duty_range, count_steps):
+            # fade in
+            strip1_green.duty_u16(duty)
+            # fade out
+            reverse_duty = duty_range - duty
+            strip2_green.duty_u16(reverse_duty)
+            sleep(fade_sleep)
+        for duty in range(duty_range, 0, -count_steps):
+            # fade out
+            strip1_green.duty_u16(duty)
+            # fade in
+            reverse_duty = duty_range - duty
+            strip2_green.duty_u16(reverse_duty)
+            sleep(fade_sleep)
