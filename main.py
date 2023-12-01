@@ -4,7 +4,8 @@ from time import sleep
 # color mode options
 # alternating_green_fade will alternate between both strips fading green
 # alternating_green_red_fade will alternate green/red on each strip back and forth fading
-color_mode = "alternating_green_red_fade"
+# flash_red_green_fade will keep both the strips the same color (red/green) instead of alternating and will fade between them
+color_mode = "flash_red_green_fade"
 
 # turn on the onboard led
 #led = Pin(25, Pin.OUT)
@@ -39,8 +40,9 @@ strip2_red.duty_u16(start_duty)
 
 # make it fade
 fade_sleep = 0.0001 #0.0001
-count_steps = 2
+count_steps = 1  
 duty_range = 65025
+duty_min = 5000
 
 while True:
     if color_mode == "alternating_green_fade":
@@ -101,3 +103,26 @@ while True:
             strip2_green.duty_u16(reverse_duty)
             sleep(fade_sleep)
         strip1_red.freq(100)
+    if color_mode == "flash_red_green_fade":
+        # red
+        for duty in range(duty_min, duty_range, count_steps):
+            # fade in
+            strip1_red.duty_u16(duty)
+            strip2_red.duty_u16(duty)
+        for duty in range(duty_range, duty_min, -count_steps):
+            # fade out
+            strip1_red.duty_u16(duty)
+            strip2_red.duty_u16(duty)
+        strip1_red.duty_u16(0)
+        strip2_red.duty_u16(0)
+        # green
+        for duty in range(duty_min, duty_range, count_steps):
+            # fade in
+            strip1_green.duty_u16(duty)
+            strip2_green.duty_u16(duty)
+        for duty in range(duty_range, duty_min, -count_steps):
+            # fade out
+            strip1_green.duty_u16(duty)
+            strip2_green.duty_u16(duty)
+        strip1_green.duty_u16(0)
+        strip2_green.duty_u16(0)
